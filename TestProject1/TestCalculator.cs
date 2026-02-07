@@ -16,28 +16,17 @@ namespace TestProject1
         IWebElement calcBtn;
         IWebElement resetBtn;
         IWebElement divResult;
+        ChromeOptions options;
 
         [OneTimeSetUp]
         public void SetUp()
         {
-            ChromeOptions options = new ChromeOptions();
-            // Ensure Chrome runs in headless mode
-            options.AddArguments("headless");
-            // Bypass OS security model
-            options.AddArguments("no-sandbox");
-            // Overcome limited resource problems
-            options.AddArguments("disable-dev-shm-usage");
-            // Applicable to Windows OS only
-            options.AddArguments("disable-gpu");
-            // Set window size to ensure elements are visible
-            options.AddArguments("window-size=1920x1080");
-            // Disable extensions
-            options.AddArguments("disable-extensions");
-            // Remote debugging port
-            options.AddArguments("remote-debugging-port=9222");
+            options = new ChromeOptions();
+            options.AddArgument("--headless=new");
             driver = new ChromeDriver(options);
+            // Add implicit wait
             driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(10);
-            driver.Url = "https://calculatorhtml.onrender.com";
+            driver.Url = "https://calculatorhtml.onrender.com/";
 
             textBoxFirstNum = driver.FindElement(By.Id("number1"));
             dropDownOperation = driver.FindElement(By.Id("operation"));
@@ -47,14 +36,11 @@ namespace TestProject1
             divResult = driver.FindElement(By.Id("result"));
         }
 
-        [TearDown]
+        [OneTimeTearDown]
         public void TearDown()
         {
-            if (driver != null)
-            {
-                driver.Quit();
-                driver.Dispose();
-            }
+            driver.Quit();
+            driver.Dispose();
         }
 
         public void PerformCalculation(string firstNumber, string operation,

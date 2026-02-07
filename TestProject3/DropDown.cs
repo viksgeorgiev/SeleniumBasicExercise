@@ -11,29 +11,25 @@ namespace TestProject3
     public class WorkingWithDropDown
     {
         IWebDriver driver;
+        ChromeOptions options;
 
         [SetUp]
         public void SetUp()
         {
-            ChromeOptions options = new ChromeOptions();
-            // Ensure Chrome runs in headless mode
-            options.AddArguments("headless");
-            // Bypass OS security model
-            options.AddArguments("no-sandbox");
-            // Overcome limited resource problems
-            options.AddArguments("disable-dev-shm-usage");
-            // Applicable to Windows OS only
-            options.AddArguments("disable-gpu");
-            // Set window size to ensure elements are visible
-            options.AddArguments("window-size=1920x1080");
-            // Disable extensions
-            options.AddArguments("disable-extensions");
-            // Remote debugging port
-            options.AddArguments("remote-debugging-port=9222");
+            options = new ChromeOptions();
+            options.AddArgument("--headless=new");
             driver = new ChromeDriver(options);
 
             // Add implicit wait
             driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(10);
+        }
+
+        [TearDown]
+        public void TearDown()
+        {
+            // Close the driver
+            driver.Quit();
+            driver.Dispose();
         }
 
         [Test]
@@ -97,14 +93,6 @@ namespace TestProject3
             }
         }
 
-        [TearDown]
-        public void TearDown()
-        {
-            if (driver != null)
-            {
-                driver.Quit();
-                driver.Dispose();
-            }
-        }
+  
     }
 }
