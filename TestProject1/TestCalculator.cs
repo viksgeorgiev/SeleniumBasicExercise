@@ -20,7 +20,22 @@ namespace TestProject1
         [OneTimeSetUp]
         public void SetUp()
         {
-            driver = new ChromeDriver();
+            ChromeOptions options = new ChromeOptions();
+            // Ensure Chrome runs in headless mode
+            options.AddArguments("headless");
+            // Bypass OS security model
+            options.AddArguments("no-sandbox");
+            // Overcome limited resource problems
+            options.AddArguments("disable-dev-shm-usage");
+            // Applicable to Windows OS only
+            options.AddArguments("disable-gpu");
+            // Set window size to ensure elements are visible
+            options.AddArguments("window-size=1920x1080");
+            // Disable extensions
+            options.AddArguments("disable-extensions");
+            // Remote debugging port
+            options.AddArguments("remote-debugging-port=9222");
+            driver = new ChromeDriver(options);
             driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(10);
             driver.Url = "https://calculatorhtml.onrender.com";
 
