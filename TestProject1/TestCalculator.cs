@@ -47,10 +47,14 @@ namespace TestProject1
             divResult = driver.FindElement(By.Id("result"));
         }
 
-        [OneTimeTearDown]
+        [TearDown]
         public void TearDown()
         {
-            driver.Quit();
+            if (driver != null)
+            {
+                driver.Quit();
+                driver.Dispose();
+            }
         }
 
         public void PerformCalculation(string firstNumber, string operation,

@@ -73,12 +73,14 @@ namespace TestProject2
             Assert.IsTrue(File.Exists(path), "CSV file was not created");
             Assert.IsTrue(new FileInfo(path).Length > 0, "CSV file is empty");
         }
-
         [TearDown]
         public void TearDown()
         {
-            // Quit the driver
-            driver.Quit();
+            if (driver != null)
+            {
+                driver.Quit();
+                driver.Dispose();
+            }
         }
     }
 }
